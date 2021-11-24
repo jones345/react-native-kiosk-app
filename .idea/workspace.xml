@@ -5,9 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56113b99-25f9-4823-828f-1037565390d7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/DrawerNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/DrawerNavigator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/InputTextField.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/InputTextField.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpers/emailValidator.js" beforeDir="false" afterPath="$PROJECT_DIR$/helpers/emailValidator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpers/nameValidator.js" beforeDir="false" afterPath="$PROJECT_DIR$/helpers/nameValidator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpers/passwordValidator.js" beforeDir="false" afterPath="$PROJECT_DIR$/helpers/passwordValidator.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/DocDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/DocDetails.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/HomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/HomeScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/LoginScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/LoginScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/RegisterScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/RegisterScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,5 +48,16 @@
       <updated>1636803192827</updated>
     </task>
     <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="172" y="127" width="1648" height="853" key="AVDManager" timestamp="1637736530275">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state x="172" y="127" width="1648" height="853" key="AVDManager/72.27.1848.1053/1920.0.1920.1080@72.27.1848.1053" timestamp="1637660003008" />
+    <state x="172" y="127" width="1648" height="853" key="AVDManager/72.27.1848.1053@72.27.1848.1053" timestamp="1637736530275" />
+    <state x="485" y="188" width="1022" height="737" key="SettingsEditor" timestamp="1637325443364">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state x="485" y="188" width="1022" height="737" key="SettingsEditor/72.27.1848.1053/1920.0.1920.1080@72.27.1848.1053" timestamp="1637325443364" />
   </component>
 </project>

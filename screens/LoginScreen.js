@@ -1,22 +1,119 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
-// import Background from '../components/Background'
-// import Logo from '../components/Logo'
-// import Header from '../components/Header'
-// import Button from '../components/Button'
-// import TextInput from '../components/TextInput'
-// import BackButton from '../components/BackButton'
-// import { theme } from '../core/theme'
-// import { emailValidator } from '../helpers/emailValidator'
-// import { passwordValidator } from '../helpers/passwordValidator'
-
+import React, { useState ,useEffect} from 'react'
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView,Alert } from "react-native";
 import InputTextField from '../components/InputTextField'
-
+import passwordValidator from '../helpers/passwordValidator';
+import idNumberValidator from '../helpers/IdNumberValidators';
+import axios from 'axios';
+import { ALERT_TYPE, Dialog, Root, Toast } from 'react-native-alert-notification';
+import { ActivityIndicator } from 'react-native-paper';
 
 export default function LoginScreen({ navigation }) {
 
+    const baseUrl = 'http://mobileappdbapi-env.eba-srvjzqzd.eu-west-1.elasticbeanstalk.com:5000/';
+    const [password, setPassword] = useState({ value: '', error: '' })
+    const [idNumber, setIdNumber] = useState({ value: '', error: '' })
+   const [isLoading, setIsLoading] = useState(true);
+   const [userToken, setUserToken] = useState('');
+
+   const authContext = React.useMemo(() => ({
+    signIn:()=>{
+      setUserToken('userToken');
+      setIsLoading(false);
+    },
+    signOut:()=>{
+        setUserToken('userToken');
+        setIsLoading(false);
+    },
+    signUp:()=>{
+        setUserToken('userToken');
+        setIsLoading(false);
+    },
+
+   }), []);
+
+   useEffect(() => {
+       setTimeout(() => {
+        setIsLoading(false);
+       }, 1000);
+   },[]);
+
+   if(isLoading){
+    return(
+        <View style={{flex:1,justifyContent:'center',alignItem:'center'}}>
+            <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+    )
+}
+
+    const onLoginPressed = () => {
+        const IdError = idNumberValidator(idNumber.value)
+        const passwordError = passwordValidator(password.value)
+       
+       
+        if (IdError || passwordError) {
+          setIdNumber({ ...idNumber, error: IdError })
+          setPassword({ ...password, error: passwordError })
+          Alert.alert('========================>', 'Please enter valid Id Number and Password')
+          Toast.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: 'Success',
+            textBody:'Please enter valid Id Number and Password',
+          })
+          return
+        }
+        else{
+        
+        
+        // navigation.navigate('DrawerNavigator')
+        axios.post(`http://mobileappdbapi-env.eba-srvjzqzd.eu-west-1.elasticbeanstalk.com:5000/users/signin/auth`,{},{
+            params: {
+                idNumber: idNumber.value,
+                password: password.value
+            },
+            headers: {
+                'Content-Type': 'application/json',
+            }
+            
+        }   
+        )
+            .then(res => {
+                
+                
+                if(res.status === 200){
+                    Toast.show({
+                        type: ALERT_TYPE.SUCCESS,
+                        title: 'Success',
+                        textBody:'Congrats! this is toast notification success',
+                      })
+                      Alert.alert('========================>',res.data)
+                    navigation.navigate('DrawerNavigator')
+                }
+                else if(res.status === 422){
+                    Toast.show({
+                        type: ALERT_TYPE.WARNING,
+                        title: 'Success',
+                        textBody:'Invalid credentials',
+                      })
+                    Alert.alert('Invalid credentials')
+                }
+                else if(res.status === 404){
+                    Alert.alert('User not found')
+                }
+                else{
+                    Alert.alert('Something went wrong')
+                }
+                
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    
+        }
+    
+       
+      }
   return ( 
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container,{paddingHorizontal:20}]}>
     <View>
         <View style={{ marginTop: 60, alignItems: "center", justifyContent: "center" }}>
             <Image source={require('../assets/images/onlinechat.jpg')}  style={{height: 250, width: 330, borderRadius: 25}} />
@@ -38,15 +135,9 @@ export default function LoginScreen({ navigation }) {
 
         <Text style={[styles.text, { color: "#ABB4BD", fontSize: 15, textAlign: "center", marginVertical: 20 }]}>or</Text>
 
-        <InputTextField style={styles.inputTitle} title="Email" />
-        <InputTextField
-            style={{
-                marginTop: 32,
-                marginBottom: 8
-            }}
-            title="Password"
-            isSecure={true}
-        />
+      
+         <InputTextField style={[styles.inputTitle,{paddingTop:8}]}  value={idNumber.value}title="ID Number" onChangeText={(text) => setIdNumber({ value: text, error: '' })}  errorText={idNumber.error} />
+        <InputTextField style={[styles.inputTitle,{paddingTop:8}]}  value={password.value}title="Password"  onChangeText={(text) => setPassword({ value: text, error: '' })}  errorText={password.error}/>
         <TouchableOpacity
           onPress={() => navigation.navigate('ResetPasswordScreen')}
        >
@@ -55,7 +146,7 @@ export default function LoginScreen({ navigation }) {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.submitContainer}
-         onPress={() => navigation.navigate('DrawerNavigator')}
+         onPress={onLoginPressed}
         >
             <Text
                 style={[
@@ -94,67 +185,6 @@ export default function LoginScreen({ navigation }) {
    );
 }
 
-// export default function LoginScreen({ navigation }) {
-//   const [email, setEmail] = useState({ value: '', error: '' })
-//   const [password, setPassword] = useState({ value: '', error: '' })
-
-//   const onLoginPressed = () => {
-//     const emailError = passwordValidator(email.value)
-//     const passwordError = passwordValidator(password.value)
-//     if (emailError || passwordError) {
-//       setEmail({ ...email, error: emailError })
-//       setPassword({ ...password, error: passwordError })
-//       return
-//     }
-//     navigation.reset({
-//       index: 0,
-//       routes: [{ name: 'DrawerNavigator' }],
-//     })
-//   }
-
-//   return (
-//     <Background>
-//       <BackButton goBack={navigation.goBack} />
-//       <Logo />
-//       <Header>Welcome back.</Header>
-//       <TextInput
-//         label="ID NUMBER"
-//         returnKeyType="next"
-//         value={email.value}
-//         onChangeText={(text) => setEmail({ value: text, error: '' })}
-//         error={!!email.error}
-//         errorText={email.error}
-//         autoCapitalize="none"
-        
-//       />
-//       <TextInput
-//         label="Password"
-//         returnKeyType="done"
-//         value={password.value}
-//         onChangeText={(text) => setPassword({ value: text, error: '' })}
-//         error={!!password.error}
-//         errorText={password.error}
-//         secureTextEntry
-//       />
-//       <View style={styles.forgotPassword}>
-//         <TouchableOpacity
-//           onPress={() => navigation.navigate('ResetPasswordScreen')}
-//         >
-//           <Text style={styles.forgot}>Forgot your password?</Text>
-//         </TouchableOpacity>
-//       </View>
-//       <Button mode="contained" onPress={onLoginPressed}>
-//         Login
-//       </Button>
-//       <View style={styles.row}>
-//         <Text>Don’t have an account? </Text>
-//         <TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>
-//           <Text style={styles.link}>Sign up</Text>
-//         </TouchableOpacity>
-//       </View>
-//     </Background>
-//   )
-// }
 
 const styles = StyleSheet.create({
   container: {

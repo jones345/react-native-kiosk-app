@@ -14,8 +14,10 @@ import RegisterScreen from './screens/RegisterScreen'
 import ResetPasswordScreen from './screens/ResetPasswordScreen'
 import DrawerNavigator from './components/DrawerNavigator'   
 import DocDetails from './screens/DocDetails'
-
+import DocHomeScreen from './DocSCreen/DocHomeScreen'
+import Profile  from './screens/Profile'
 StatusBar.setBarStyle('light-content')
+
 const Stack = createStackNavigator()
 
 export default function App() {
@@ -34,6 +36,8 @@ export default function App() {
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
           <Stack.Screen name="DocDetails" component={DocDetails} />
+          <Stack.Screen name="DocHomeScreen" component={DocHomeScreen} />
+          <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen
             name="ResetPasswordScreen"
             component={ResetPasswordScreen}

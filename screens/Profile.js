@@ -15,33 +15,22 @@ import {
   import COLORS from '../core/color';
   import {AntDesign} from '@expo/vector-icons';
 
+export default function Profile({navigation}) {
 
-export default function DocDetails({navigation, route}) {
-    const {item} = route.params;
-    let newDate = new Date()
-    let date = newDate.getDate();
-    let month_raw = newDate.getMonth() + 1;
- 
-    
-        return (
-            <ScrollView style={{flex: 1, backgroundColor: COLORS.white,paddingHorizontal:20}}>
+    return (
+      <ScrollView style={{flex: 1, backgroundColor: COLORS.white,paddingHorizontal:20}}>
       <StatusBar backgroundColor={COLORS.background} />
       <View style={{height: 400, backgroundColor: COLORS.background}}>
         <ImageBackground
           resizeMode="contain"
-          source={item?.image}
+          source={require('../assets/images/onboarding/profile.png')}
           style={{
             height: 280,
             top: 20,
           }}>
           {/* Render  Header */}
           <View style={style.header}>
-            <Icon
-              name="arrow-left"
-              size={28}
-              color={COLORS.dark}
-              onPress={navigation.goBack}
-            />
+          <Icon name="sort-variant" size={28} onPress={navigation.toggleDrawer} />
             <Icon name="dots-vertical" size={28} color={COLORS.dark} />
           </View>
         </ImageBackground>
@@ -104,13 +93,13 @@ export default function DocDetails({navigation, route}) {
           <View style={{flexDirection: 'row', paddingHorizontal: 20}}>
             <Image
               //  source={require('../assets/images/onboarding/profile.png')}
-               source={item?.image}
+              source={require('../assets/images/onboarding/profile.png')}
               style={{height: 40, width: 40, borderRadius: 20}}
             />
             <View style={{flex: 1, paddingLeft: 10}}>
               <Text
                 style={{color: COLORS.dark, fontSize: 12, fontWeight: 'bold'}}>
-               {item.type} {item.name}
+               jones mike
               </Text>
               <Text
                 style={{
@@ -122,7 +111,7 @@ export default function DocDetails({navigation, route}) {
                 Doctor
               </Text>
             </View>
-            <Text style={{color: COLORS.grey, fontSize: 12}}>{month_raw}</Text>
+            <Text style={{color: COLORS.grey, fontSize: 12}}></Text>
           </View>
           <Text style={style.comment}>
           The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
@@ -148,58 +137,10 @@ export default function DocDetails({navigation, route}) {
         </View>
       </View>
     </ScrollView>
-        )
-    
-}
-let heartcount = 1
-class heartClass extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hearts: [],
-    };
-  }
-  addheart=()=>{
-    this.setState({
-
-      hearts: [...this.state.hearts, 
-        {
-       id: heartcount
-      }
-    ]
-    },
-    ()=>{
-      heartcount++;
-    }
-
-    )
-  }
-  render() {
-    return (
-      <View style={style.heart}>
-        {this.state.hearts.map(hearts =>{
-          return <heartContainer key={hearts.id}/>
-        })}
-      </View>
-
-    );
-  }
+        );
 }
 
-class heartContainer extends Component {
-  render() {
-    return (
-            <Animated.View style={[style.heartContainer]}>
-              <Heart color="purple"/>
-            </Animated.View>
-    );
-  }
-}
-const Heart =props =>(
-  <View {...props} style={[style.Heart,props.style]}>
-    <AntDesign name="heart" size={30} color={props.color}/>
-  </View>
-)
+
 
 const style = StyleSheet.create({
   heart: {},

@@ -1,22 +1,109 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
 import InputTextField from '../components/InputTextField'
+import  emailValidator from '../helpers/emailValidator'
+import nameValidator from '../helpers/nameValidator'
+import passwordValidator from '../helpers/passwordValidator'
+import {signup} from '../helpers/ApiCalls';
+import axios from 'axios';
 
 export default function RegisterScreen({ navigation }) {
+
+     const baseUrl = 'http://mobileappdbapi-env.eba-srvjzqzd.eu-west-1.elasticbeanstalk.com:5000/';
+     const [name, setName] = useState({ value: '', error: '' })
+     const [lastName, setLastName] = useState({ value: '', error: '' })
+     const [email, setEmail] = useState({ value: '', error: '' })
+     const [gender, setGender] = useState({ value: '', error: '' })
+     const [password, setPassword] = useState({ value: '', error: '' })
+     const [idNumber, setIdNumber] = useState({ value: '', error: '' })
+
+     const onSignUpPressed = (event) => {
+        
+        const  lastNameError = nameValidator(lastName.value)
+        const genderError = nameValidator(gender.value)
+        const IdError = nameValidator(idNumber.value)
+        const emailError = emailValidator(email.value)
+        const nameError = nameValidator(name.value)
+        const passwordError = passwordValidator(password.value)
+
+        if (emailError || passwordError || nameError || lastNameError || genderError || IdError) {
+          setName({ ...name, error: nameError })
+          setEmail({ ...email, error: emailError })
+          setPassword({ ...password, error: passwordError })
+          setLastName({ ...lastName, error: lastNameError })
+          setGender({ ...gender, error:genderError})
+          setIdNumber({...idNumber,error:IdError})
+          return
+        }
+       
+        const userData = {
+            
+            email: email.value,
+            firstName: name.value,
+            gender: gender.value,
+             idNumber: idNumber.value,
+             lastName: lastName.value,
+             password: password.value
+        }
+        console.log(userData)
+
+        axios.post(`http://mobileappdbapi-env.eba-srvjzqzd.eu-west-1.elasticbeanstalk.com:5000/users/signup`,{
+            
+            email: email.value,
+            firstName: name.value,
+            gender: gender.value,
+             idNumber: idNumber.value,
+             lastName: lastName.value,
+             password: password.value 
+        })
+        .then(res =>{
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'DrawerNavigator' }],
+              })
+              console.log(res)
+              console.log(res.data)
+        }).catch(err =>{
+            console.log(err)
+        })
+       
+      }
+
+
   return (
 
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container,{paddingHorizontal:20}]}>
     <View>
         <View style={{ marginTop: 60, alignItems: "center", justifyContent: "center" }}>
             <Image source={require('../assets/images/onlinechat.jpg')}  style={{height: 250, width: 330, borderRadius: 25}} />
-            <Text style={[styles.text, { marginTop: 10, fontSize: 22, fontWeight: "500" }]}>LOGO NAME</Text>
+            <Text style={[styles.text, { marginTop: 10, fontSize: 22, fontWeight: "500" }]}></Text>
         </View>
-        <Text style={[styles.text, { color: "#ABB4BD", fontSize: 15, textAlign: "center", marginVertical: 20 }]}>or</Text>
+        <View style={{ marginTop: 48, flexDirection: "row", justifyContent: "center" }}>
+            <TouchableOpacity>
+                <View style={styles.socialButton}>
+                    <Image source={require('../assets/images/onboarding/facebook.png')} style={styles.socialLogo} />
+                    <Text style={styles.text}>Facebook</Text>
+                </View>
+            </TouchableOpacity>
 
-        <InputTextField style={styles.inputTitle} title="Email" />
+            <TouchableOpacity style={styles.socialButton}>
+                <Image source={require('../assets/images/onboarding/google.png')} style={styles.socialLogo} />
+                <Text style={styles.text}>Google</Text>
+            </TouchableOpacity>
+        </View>
+        <Text style={[styles.text, { color: "#ABB4BD", fontSize: 15, textAlign: "center", marginVertical: 20 }]}></Text>
+
+        <InputTextField style={[styles.inputTitle,{paddingTop:8}]} value={name.value} title="First Name" onChangeText={(text) => setName({ value: text, error: '' })}   errorText={name.error}/>
+        <InputTextField style={[styles.inputTitle,{paddingTop:8}]}  value={lastName.value}title="Last Name" onChangeText={(text) => setLastName({ value: text, error: '' })}  errorText={lastName.error} />
+        <InputTextField style={[styles.inputTitle,{paddingTop:8}]}  value={email.value}title="Email" onChangeText={(text) => setEmail({ value: text, error: '' })}  errorText={email.error} />
+        <InputTextField style={[styles.inputTitle,{paddingTop:8}]} value={gender.value} title="Gender" onChangeText={(text) => setGender({ value: text, error: '' })}  errorText={gender.error} />
+        <InputTextField style={[styles.inputTitle,{paddingTop:8}]}  value={idNumber.value}title="ID Number" onChangeText={(text) => setIdNumber({ value: text, error: '' })}  errorText={idNumber.error} />
+        <InputTextField style={[styles.inputTitle,{paddingTop:8}]}  value={password.value}title="Password"  onChangeText={(text) => setPassword({ value: text, error: '' })}  errorText={password.error}/>
+
        
         <TouchableOpacity style={styles.submitContainer}
-         onPress={() => navigation.navigate('DrawerNavigator')}
+        //  onPress={() => navigation.navigate('DrawerNavigator')}
+        onPress={onSignUpPressed}
         >
             <Text
                 style={[
@@ -28,12 +115,12 @@ export default function RegisterScreen({ navigation }) {
                     }
                 ]}
             >
-                Reset Password
+                Create Account
             </Text>
         </TouchableOpacity>
 
         <TouchableOpacity 
-         onPress={() => navigation.navigate('RegisterScreen')}
+         onPress={() => navigation.navigate('LoginScreen')}
         >
         <Text
             style={[
@@ -46,7 +133,7 @@ export default function RegisterScreen({ navigation }) {
                 }
             ]}
         >
-            Don't have an account? <Text style={[styles.text, styles.link]}>Register Now</Text>
+             have an account? <Text style={[styles.text, styles.link]}>Login</Text>
         </Text>
         </TouchableOpacity>
     </View>

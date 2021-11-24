@@ -11,8 +11,8 @@ import {View, Image, Text, StatusBar} from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
 import COLORS from '../core/color';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-
+import DocHomeScreen from '../DocSCreen/DocHomeScreen'
+import Profile from '../screens/Profile';
 const Drawer = createDrawerNavigator();
 
 const DrawerScreenContainer = ({children}) => {
@@ -128,7 +128,7 @@ const DrawerNavigator = () => {
       </Drawer.Screen>
 
       <Drawer.Screen
-        name="ADD PET"
+        name="Doctors"
         options={{
           drawerIcon: ({color}) => (
             <Icon name="plus-box" size={25} style={{marginRight: -20, color}} />
@@ -136,7 +136,7 @@ const DrawerNavigator = () => {
         }}>
         {props => (
           <DrawerScreenContainer>
-            <HomeScreen {...props} />
+            <DocHomeScreen {...props} />
           </DrawerScreenContainer>
         )}
       </Drawer.Screen>
@@ -164,7 +164,7 @@ const DrawerNavigator = () => {
         }}>
         {props => (
           <DrawerScreenContainer>
-            <HomeScreen {...props} />
+            <Profile {...props} />
           </DrawerScreenContainer>
         )}
       </Drawer.Screen>

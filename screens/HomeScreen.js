@@ -15,6 +15,8 @@ import { SharedElement } from 'react-navigation-shared-element';
 import COLORS from '../core/color';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import pets from '../components/pets';
+import axios from 'axios';
+
 const {height} = Dimensions.get('window');
 const petCategories = [
   {name: 'CATS', icon: 'cat'},
@@ -23,7 +25,7 @@ const petCategories = [
   {name: 'BUNNIES', icon: 'rabbit'},
 ];
 
-const Card = ({pet, navigation}) => {
+const Card = ({pet}) => {
   return (
    
       <View style={style.cardContainer}>
@@ -78,22 +80,38 @@ const Card = ({pet, navigation}) => {
   );
 };
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({route,navigation}) => {
   const [selectedCategoryIndex, setSeletedCategoryIndex] = React.useState(0);
   const [filteredPets, setFilteredPets] = React.useState([]);
-
+  const [doctors, setDoctors] = React.useState([]);
+  
   const fliterPet = index => {
     const currentPets = pets.filter(
       item => item?.pet?.toUpperCase() == petCategories[index].name,
     )[0]?.pets;
     setFilteredPets(currentPets);
   };
+  const getdata = () => {
+    const token =`eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MjQzMTI5MjkiLCJhdXRoIjpbeyJhdXRob3JpdHkiOiJST0xFX0NMSUVOVCJ9XSwiaWF0IjoxNjM3NzU3OTMyLCJleHAiOjE2Mzc3OTM5MzJ9.bQSwCk8A2-t0XVKcLUCXhGo6idoXr_QIcHkWsuiv_Qg`
+    const AuthStr = 'Data '.concat(token); 
+    axios.get('http://mobileappdbapi-env.eba-srvjzqzd.eu-west-1.elasticbeanstalk.com:5000/medicals/doctors/all',{ 'headers': { 'Authorization': AuthStr } })
+    .then(res =>{
+      doctors.push(res.data)
+      setDoctors(doctors)
+        console.log(doctors)
+    }).catch(err =>{
+        console.log(err)
+    })
+  }
 
   React.useEffect(() => {
     fliterPet(0);
+    getdata();
+
   }, []);
 
   return (
+    
     <SafeAreaView style={{flex: 1, color: COLORS.white}}>
       <View style={style.header}>
         <Icon name="sort-variant" size={28} onPress={navigation.toggleDrawer} />
@@ -105,7 +123,7 @@ const HomeScreen = ({navigation}) => {
           style={{height: 30, width: 30, borderRadius: 25}}
         />
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      {/* <ScrollView showsVerticalScrollIndicator={false}> */}
         <View style={style.mainContainer}>
           {/* Render the search inputs and icons */}
           <View style={style.searchInputContainer}>
@@ -117,45 +135,6 @@ const HomeScreen = ({navigation}) => {
             />
             <Icon name="sort-ascending" size={24} color={COLORS.grey} />
           </View>
-          
-
-          {/* Render all the categories */}
-          {/* <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: 20,
-            }}>
-            {petCategories.map((item, index) => (
-              <View key={'pet' + index} style={{alignItems: 'center'}}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setSeletedCategoryIndex(index);
-                    fliterPet(index);
-                  }}
-                  style={[
-                    style.categoryBtn,
-                    {
-                      backgroundColor:
-                        selectedCategoryIndex == index
-                          ? COLORS.primary
-                          : COLORS.white,
-                    },
-                  ]}>
-                  <Icon
-                    name={item.icon}
-                    size={30}
-                    color={
-                      selectedCategoryIndex == index
-                        ? COLORS.white
-                        : COLORS.primary
-                    }
-                  />
-                </TouchableOpacity>
-                <Text style={style.categoryBtnName}>{item.name}</Text>
-              </View>
-            ))}
-          </View> */}
 
           {/* Render the cards with flatlist */}
           <View style={{marginTop: 20}}>
@@ -225,7 +204,7 @@ const HomeScreen = ({navigation}) => {
             />
           </View>
         </View>
-      </ScrollView>
+      {/* </ScrollView> */}
     </SafeAreaView>
   );
 };

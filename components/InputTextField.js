@@ -10,7 +10,11 @@ export default class InputTextField extends React.Component {
                 <TextInput
                     placeholder={this.props.placeholderText}
                     secureTextEntry={this.props.isSecure}
+                    value={this.props.value}
                     style={styles.input}
+                    onChangeText={this.props.onChangeText}
+                    errorText={this.props.errorText}
+                    error = {this.props.error}
                 />
                 <View style={{ borderBottomColor: "#D8D8D8", borderBottomWidth: 1 }} />
             </View>
